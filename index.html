@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Girlfriend?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 90%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #ff6b6b;
+            animation: fall 10s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .question {
+            font-size: 2.5em;
+            color: #e84393;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .message {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #00b894, #55efc4);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 184, 148, 0.4);
+        }
+
+        .btn-yes:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 184, 148, 0.5);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #ff7675, #fab1a0);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 118, 117, 0.4);
+        }
+
+        .btn-no:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 118, 117, 0.5);
+        }
+
+        .response {
+            display: none;
+            font-size: 1.5em;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            animation: celebrate 0.5s ease-out;
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .response-yes {
+            background: linear-gradient(135deg, #dfe6e9, #b2bec3);
+            color: #2d3436;
+        }
+
+        .response-no {
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            color: white;
+        }
+
+        .emoji {
+            font-size: 4em;
+            margin-bottom: 15px;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .personal-message {
+            font-style: italic;
+            color: #888;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+
+    <div class="container">
+        <div class="question">💕 Will You Be My Girlfriend? 💕</div>
+        
+        <div class="message">
+            From the moment I met you, my life has been brighter. 
+            Every conversation with you makes my day better. 
+            Would you do me the honor of being my girlfriend? ❤️
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-yes" onclick="respond('yes')">Yes! 💖</button>
+            <button class="btn btn-no" onclick="respond('no')">Let me think...</button>
+        </div>
+
+        <div class="response" id="response"></div>
+    </div>
+
+    <script>
+        function respond(answer) {
+            const responseDiv = document.getElementById('response');
+            const buttons = document.querySelector('.buttons');
+            const message = document.querySelector('.message');
+            const question = document.querySelector('.question');
+
+            buttons.style.display = 'none';
+            message.style.display = 'none';
+
+            if (answer === 'yes') {
+                responseDiv.className = 'response response-yes';
+                responseDiv.innerHTML = `
+                    <div class="emoji">🎉💑🎉</div>
+                    <div>YAY! You just made me the happiest person! 💕</div>
+                    <div class="personal-message">
+                        Thank you for saying yes! I promise to make you smile every day. 
+                        This is the beginning of something beautiful! ✨
+                    </div>
+                `;
+                createCelebration();
+            } else {
+                responseDiv.className = 'response response-no';
+                responseDiv.innerHTML = `
+                    <div class="emoji">😢💔</div>
+                    <div>Oh no... that's okay!</div>
+                    <div class="personal-message">
+                        I understand. Maybe I was too forward. 
+                        But I want you to know that I truly care about you, 
+                        and if you ever change your mind, I'll be here! 💫
+                    </div>
+                `;
+            }
+
+            responseDiv.style.display = 'block';
+        }
+
+        function createCelebration() {
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff', '#5f27cd'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.cssText = `
+                        position: fixed;
+                        width: 10px;
+                        height: 10px;
+                        background: ${colors[Math.floor(Math.random() * colors.length)]};
+                        left: ${Math.random() * 100}vw;
+                        top: -10px;
+                        border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                        animation: fall ${2 + Math.random() * 3}s linear forwards;
+                        z-index: 1000;
+                    `;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 30);
+            }
+        }
+
+        // Create floating hearts background
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const heartSymbols = ['❤️', '💕', '💗', '💖', '💓'];
+
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (5 + Math.random() * 10) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (15 + Math.random() * 20) + 'px';
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        createHearts();
+    </script>
+</body>
+</html>
